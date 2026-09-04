@@ -84,7 +84,6 @@ int _config_update_bootstrap_dns_rule(void)
 				break;
 			}
 
-			/* keep the port parsed from resolv.conf, default to 53 if not specified */
 			if (port == PORT_NOT_DEFINED) {
 				port = DEFAULT_DNS_PORT;
 			}
