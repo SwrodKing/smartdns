@@ -42,6 +42,7 @@ int _config_update_bootstrap_dns_rule(void)
 	int has_ip_upstream = 0;
 	const char *resolv_file = NULL;
 	char *server_argv[4];
+	char server_ip[DNS_MAX_IPLEN + 16];
 
 	if (dns_conf_exist_bootstrap_dns == 0) {
 		for (int i = 0; i < dns_conf.server_num; i++) {
@@ -83,8 +84,19 @@ int _config_update_bootstrap_dns_rule(void)
 				break;
 			}
 
+			/* keep the port parsed from resolv.conf, default to 53 if not specified */
+			if (port != PORT_NOT_DEFINED) {
+				if (strchr(ns_ip, ':') != NULL) {
+					snprintf(server_ip, sizeof(server_ip), "[%s]:%d", ns_ip, port);
+				} else {
+					snprintf(server_ip, sizeof(server_ip), "%s:%d", ns_ip, port);
+				}
+			} else {
+				safe_strncpy(server_ip, ns_ip, sizeof(server_ip));
+			}
+
 			server_argv[0] = "server";
-			server_argv[1] = ns_ip;
+			server_argv[1] = server_ip;
 			server_argv[2] = "-bootstrap-dns";
 			server_argv[3] = NULL;
 			if (_config_server_udp(NULL, 3, server_argv) != 0) {
