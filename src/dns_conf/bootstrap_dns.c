@@ -85,14 +85,14 @@ int _config_update_bootstrap_dns_rule(void)
 			}
 
 			/* keep the port parsed from resolv.conf, default to 53 if not specified */
-			if (port != PORT_NOT_DEFINED) {
-				if (strchr(ns_ip, ':') != NULL) {
-					snprintf(server_ip, sizeof(server_ip), "[%s]:%d", ns_ip, port);
-				} else {
-					snprintf(server_ip, sizeof(server_ip), "%s:%d", ns_ip, port);
-				}
+			if (port == PORT_NOT_DEFINED) {
+				port = DEFAULT_DNS_PORT;
+			}
+
+			if (strchr(ns_ip, ':') != NULL) {
+				snprintf(server_ip, sizeof(server_ip), "[%s]:%d", ns_ip, port);
 			} else {
-				safe_strncpy(server_ip, ns_ip, sizeof(server_ip));
+				snprintf(server_ip, sizeof(server_ip), "%s:%d", ns_ip, port);
 			}
 
 			server_argv[0] = "server";
