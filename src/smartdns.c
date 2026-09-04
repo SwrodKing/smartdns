@@ -625,7 +625,7 @@ static int _smartdns_init_load_from_resolv(void)
 	int ret = 0;
 	int i = 0;
 
-	for (i = 0; i < 180 && dns_conf.server_num <= 0; i++) {
+	for (i = 0; i < 180 && (dns_conf.server_num - dns_conf.bootstrap_num) <= 0; i++) {
 		ret = _smartdns_load_from_resolv();
 		if (ret == 0) {
 			continue;
@@ -643,7 +643,7 @@ static int _smartdns_init_load_from_resolv(void)
 		sleep(1);
 	}
 
-	if (dns_conf.server_num <= 0) {
+	if ((dns_conf.server_num - dns_conf.bootstrap_num) <= 0) {
 		goto errout;
 	}
 
