@@ -37,9 +37,6 @@ int _config_update_bootstrap_dns_rule(void)
 	int has_ip_upstream = 0;
 	const char *resolv_file = NULL;
 	if (dns_conf_exist_bootstrap_dns == 0) {
-		/* auto load local DNS as bootstrap only when there is any domain-name upstream
-		 * (e.g. DoH) but no bootstrap-dns and no usable IP upstream in default group,
-		 * otherwise the domain can be resolved by the default group directly. */
 		for (int i = 0; i < dns_conf.server_num; i++) {
 			if (check_is_ipaddr(dns_conf.servers[i].server) != 0) {
 				has_domain_server = 1;
