@@ -159,6 +159,10 @@ static int _smartdns_load_from_resolv_file(const char *resolv_file)
 			continue;
 		}
 
+		if (dns_conf.server_num >= DNS_MAX_SERVERS) {
+			break;
+		}
+
 		if (port == PORT_NOT_DEFINED) {
 			port = DEFAULT_DNS_PORT;
 		}
